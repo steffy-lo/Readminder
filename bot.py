@@ -4,6 +4,7 @@ import constants
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
+import math
 
 
 class Bot(webdriver.Chrome):
@@ -97,15 +98,67 @@ class Bot(webdriver.Chrome):
         result_list = self.find_element_by_css_selector(
             'div[role="tabpanel"]'
         ).find_elements_by_css_selector(
-            'a'
+            'h3'
         )
 
         if len(result_list) != 1:
             for res in result_list:
-                title = res.get_attribute('innerHTML').strip()
+                link = res.find_element_by_css_selector('a')
+                title = link.get_attribute('innerHTML').strip()
+                href = link.get_attribute('href')
                 if title in alt_titles:
-                    self.get(res.get_attribute('href'))
+                    return href
         else:
-            self.get(result_list[0].get_attribute('href'))
+            link = result_list[0].find_element_by_css_selector('a')
+            return link.get_attribute('href')
 
+    def get_latest_chapter(self, link, chapters_read):
+        if link:
+            self.get(link)
+            summary_image = self.find_element_by_css_selector(
+                'div[class="summary_image"]'
+            ).find_element_by_css_selector('img')
+            summary_content = self.find_element_by_class_name(
+                'summary__content'
+            )
+
+            image = summary_image.get_attribute('src')
+            summary = summary_content.get_attribute('innerHTML').strip()
+
+            latest_chapter_el = self.find_element_by_class_name(
+                "listing-chapters_wrap"
+            ).find_elements_by_css_selector('a')
+
+            if len(latest_chapter_el) > 0:
+                latest_chapter = 0
+                read_chapters = 0
+                try:
+                    latest_chapter = float(latest_chapter_el[0].get_attribute('innerHTML').strip()[8:])
+                    read_chapters = float(chapters_read)
+                except ValueError as e:
+                    print(e)
+
+                chap_diff = latest_chapter - read_chapters
+                if chap_diff > 0:
+                    j = math.ceil(chap_diff)
+                    while j < len(latest_chapter_el) - 1:
+                        j += 1
+                        chapter_no = float(latest_chapter_el[j].get_attribute('innerHTML').strip()[8:])
+                        if chapter_no == read_chapters:
+                            return {
+                                "latest_chapter": latest_chapter,
+                                "chapters_read": read_chapters,
+                                "read_latest_chapter": latest_chapter_el[0].get_attribute('href'),
+                                "read_next_chapter": latest_chapter_el[j-1].get_attribute('href'),
+                                "image": image,
+                                "summary": summary
+                            }
+            return {
+                "latest_chapter": 0,
+                "chapters_read": chapters_read,
+                "read_latest_chapter": link,
+                "read_next_chapter": link,
+                "image": image,
+                "summary": summary
+            }
 
