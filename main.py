@@ -51,6 +51,7 @@ with open('readminder.html', 'r') as f:
 
     # Populate book info
     for chp_res in results:
+        print(chp_res)
         with open('title_entry.html', 'r') as t:
             title_entry = t.read()
             email_content = email_content[:append_from] + title_entry + email_content[append_from:]

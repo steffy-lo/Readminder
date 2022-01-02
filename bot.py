@@ -102,6 +102,7 @@ class Bot(webdriver.Chrome):
                 'h3'
             )
         except Exception as e:
+            print(e)
             return "Error"
 
         if len(result_list) != 1:
@@ -111,6 +112,7 @@ class Bot(webdriver.Chrome):
                 href = link.get_attribute('href')
                 if title in alt_titles:
                     return href
+            return result_list[0].find_element_by_css_selector('a').get_attribute('href')
         else:
             link = result_list[0].find_element_by_css_selector('a')
             return link.get_attribute('href')
@@ -118,7 +120,6 @@ class Bot(webdriver.Chrome):
     def get_latest_chapter(self, link, chapters_read):
         if link:
             self.get(link)
-            print(link)
             summary_image = self.find_element_by_css_selector(
                 'div[class="summary_image"]'
             ).find_element_by_css_selector('img')
