@@ -2,7 +2,14 @@
 1. Clone this repository `git clone https://github.com/steffy-lo/Readminder.git`
 2. Create a `.env` file and initialize your environmental variables using `.env-example` as an example. This means you need an AnimePlanet and Twilio Account if you don't already have one.
 3. Run `main.py`
-4. To automate the reminders, schedule to run `main.py` as a script using Windows Task Scheduler or a Cron Job
+4. To automate the reminders, schedule to run `readminder.bat` using Windows Task Scheduler or as a Cron Job
+
+## Windows Task Scheduler Process
+![Screenshot 2022-01-02 172635](https://user-images.githubusercontent.com/46694812/147871788-7f5fd43f-ecef-4f80-b9c5-f174eb1570bf.png)
+![Screenshot 2022-01-02 172657](https://user-images.githubusercontent.com/46694812/147871789-3e332113-3779-4c91-a0a1-f10f10a67487.png)
+![Screenshot 2022-01-02 172802](https://user-images.githubusercontent.com/46694812/147871790-cf7f6aa5-65f2-4f4f-87a3-07b36c728682.png)
+![Screenshot 2022-01-02 172824](https://user-images.githubusercontent.com/46694812/147871791-898184d2-6ee8-422a-bd2e-7ec5833b4290.png)
+![Screenshot 2022-01-02 172903](https://user-images.githubusercontent.com/46694812/147871793-0051580d-1ca5-48a8-827e-01ff2c11dcee.png)
 
 ## Inspiration
 
