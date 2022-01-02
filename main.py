@@ -6,10 +6,13 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 import datetime
-from twilio_notif import client
+from twilio.rest import Client
 
 load_dotenv()
 
+account_sid = os.environ['TWILIO_ACCOUNT_SID']
+auth_token = os.environ['TWILIO_AUTH_TOKEN']
+client = Client(account_sid, auth_token)
 read_list_info = []
 results = []
 
@@ -21,9 +24,10 @@ try:
         for info in read_list_info:
             bot.search_title(info["title"])
             link = bot.get_title_page(info["alt_titles"])
+            if link == "Error":
+                continue
             chapter_result = bot.get_latest_chapter(link, info["chapters_read"])
             chapter_result["title"] = info["title"]
-            print(chapter_result)
             results.append(chapter_result)
 
 except Exception as e:
@@ -35,6 +39,7 @@ except Exception as e:
 with open('readminder.html', 'r') as f:
     now = datetime.datetime.now()
     email_content = f.read()
+    twilio_content = "\nReadminder\n\n"
 
     placeholder_title = "Book_Title"
     placeholder_latest_chapter = "Latest_Chapter"
@@ -58,6 +63,16 @@ with open('readminder.html', 'r') as f:
             ).replace(
                 placeholder_image, chp_res["image"]
             ).replace(placeholder_read_link, chp_res["read_next_chapter"])
+            twilio_content += f'{chp_res["title"]}\n' \
+                              f'Chapter {chp_res["latest_chapter"]} is out now!\n' \
+                              f'Chapters Read: {int(chp_res["chapters_read"])}\n' \
+                              f'Read now at {chp_res["read_next_chapter"]}\n\n'
+
+    # Send Twilio Notif
+    message = client.messages \
+        .create(body=twilio_content,
+                from_=os.getenv('TWILIO_PHONE_NUMBER'),
+                to=os.getenv('YOUR_PHONE_NUMBER'))
 
     # Send the email
     print('Composing Email...')
@@ -96,4 +111,3 @@ with open('readminder.html', 'r') as f:
     print('Readminder email sent!')
 
     server.quit()
-

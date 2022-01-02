@@ -95,11 +95,14 @@ class Bot(webdriver.Chrome):
         search_input.send_keys(Keys.ENTER)
 
     def get_title_page(self, alt_titles):
-        result_list = self.find_element_by_css_selector(
-            'div[role="tabpanel"]'
-        ).find_elements_by_css_selector(
-            'h3'
-        )
+        try:
+            result_list = self.find_element_by_css_selector(
+                'div[role="tabpanel"]'
+            ).find_elements_by_css_selector(
+                'h3'
+            )
+        except Exception as e:
+            return "Error"
 
         if len(result_list) != 1:
             for res in result_list:
@@ -115,6 +118,7 @@ class Bot(webdriver.Chrome):
     def get_latest_chapter(self, link, chapters_read):
         if link:
             self.get(link)
+            print(link)
             summary_image = self.find_element_by_css_selector(
                 'div[class="summary_image"]'
             ).find_element_by_css_selector('img')
@@ -127,7 +131,7 @@ class Bot(webdriver.Chrome):
 
             latest_chapter_el = self.find_element_by_class_name(
                 "listing-chapters_wrap"
-            ).find_elements_by_css_selector('a')
+            ).find_elements_by_css_selector('li>a')
 
             if len(latest_chapter_el) > 0:
                 latest_chapter = 0
@@ -140,10 +144,13 @@ class Bot(webdriver.Chrome):
 
                 chap_diff = latest_chapter - read_chapters
                 if chap_diff > 0:
-                    j = math.ceil(chap_diff)
+                    j = math.floor(chap_diff)
                     while j < len(latest_chapter_el) - 1:
-                        j += 1
-                        chapter_no = float(latest_chapter_el[j].get_attribute('innerHTML').strip()[8:])
+                        try:
+                            chapter_no = float(latest_chapter_el[j].get_attribute('innerHTML').strip()[8:])
+                        except ValueError:
+                            print("Cannot convert to numerical. Skip...")
+                            continue
                         if chapter_no == read_chapters:
                             return {
                                 "latest_chapter": latest_chapter,
@@ -153,6 +160,7 @@ class Bot(webdriver.Chrome):
                                 "image": image,
                                 "summary": summary
                             }
+                        j += 1
             return {
                 "latest_chapter": 0,
                 "chapters_read": chapters_read,
@@ -161,4 +169,7 @@ class Bot(webdriver.Chrome):
                 "image": image,
                 "summary": summary
             }
-
+        else:
+            return {
+                "chapters_read": chapters_read
+            }
