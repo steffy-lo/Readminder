@@ -17,10 +17,10 @@ And so, the automated reading reminder, READMINDER, is built!
 
 ## What it does
 
-Readminder is an application that lets you schedule reminders based on your reading list and progress data on [Anime Planet](https://www.anime-planet.com/).
+Readminder is an application that automatically web scrapes the latest comic chapters based on your reading list and progress data on [Anime Planet](https://www.anime-planet.com/).
 Users would be required to create an Anime Planet account in order to use Readminder.
 
-Readminder sends an automated email and text reminder (scheduled through Windows task scheduler) of the latest chapter released for comics you are reading and a
+After scraping the data, Readminder then sends an automated email and text reminder (can be scheduled through Windows task scheduler) of the latest chapter released for comics you are reading and a
 respective link to read where you left off based on your progress tracked on [Anime Planet](https://www.anime-planet.com/).
 
 
