@@ -14,11 +14,9 @@
 ## Inspiration
 
 As avid readers of comics and manga, we found it a hassle to constantly keep track of the latest chapters released or the current progress for comics that we're reading.
-Even though there are many websites that allows users to create and manage their "To-Read" list, there are no reminders or notifications when the
-lastest chapter of the comic is released. 
+Even though there are many websites that allows users to create and manage their "To-Read" list, there are no reminders or notifications when the latest chapter of the comic is released and this makes the user experience cumbersome at times.
 
-Instead of manually checking these websites to view the latest updates, we came up with a cool idea to build an automated email reminder that would send us the links to read where
-we left off and let us know whenever our favourite comics release a new chapter.
+As the new year approaches, we decided to tackle this issue by making the reading process easier and convenient which will naturally encourage us to read more. Instead of manually checking these websites to view the latest updates, we came up with a cool idea to build an automated email reminder that would send us the links to read where we left off and let us know whenever our favourite comics release a new chapter.
 
 And so, the automated reading reminder, READMINDER, is built!
 
